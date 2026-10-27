@@ -93,6 +93,73 @@
       position: relative;
     }
 
+    .download-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      margin-bottom: 22px;
+      padding: 18px 22px;
+      background: #fff6ec;
+      border: 1px solid #eddbc7;
+      border-inline-start: 5px solid var(--orange);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px #173d4d1f;
+    }
+
+    .download-kicker {
+      color: var(--amber);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .download-banner h2 {
+      margin: 2px 0;
+      color: var(--navy);
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .download-banner p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .download-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 12px 22px;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      transition: background .2s ease;
+    }
+
+    .download-button:hover {
+      background: #063d51;
+    }
+
+    .download-button:focus-visible {
+      outline: 3px solid var(--navy);
+      outline-offset: 4px;
+    }
+
+    .download-button svg {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+    }
+
     .topline {
       display: flex;
       align-items: center;
@@ -968,6 +1035,17 @@
         padding: 16px 12px 23px;
       }
 
+      .download-banner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .download-button {
+        width: 100%;
+      }
+
       .topline {
         gap: 12px;
         padding-bottom: 16px;
@@ -1132,6 +1210,21 @@
 
 <body>
   <div class="shell" id="app">
+    <aside class="download-banner" aria-labelledby="downloadTitle">
+      <div>
+        <span class="download-kicker">مادة مهمة للتحميل</span>
+        <h2 id="downloadTitle">أساسيات الأمن السيبراني</h2>
+        <p><bdi lang="en">Cybersecurity Fundamentals · iTeam</bdi></p>
+      </div>
+      <a class="download-button" href="assets/Cybersecurity_Fundamentals_iTeam.pdf"
+        download="Cybersecurity_Fundamentals_iTeam.pdf" aria-label="تحميل ملف أساسيات الأمن السيبراني بصيغة PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M12 3v12m-5-5 5 5 5-5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" />
+        </svg>
+        <span>تحميل الملف <bdi lang="en">PDF</bdi></span>
+      </a>
+    </aside>
     <div class="topline">
       <div class="brand">
         <img class="brand-logo" src="assets/iteam-logo.png" alt="ITeam" width="1812" height="868">
