@@ -1,0 +1,8 @@
+Tool: built-in image_gen
+Mode: edit; transparent_background: true
+Input: the user's uploaded ITeam logo
+
+Use case: background-extraction.
+Asset type: transparent PNG logo for the existing ITEAM website header.
+Input image 1 is the EDIT TARGET: the user's small ITeam logo on a light gray/white rectangle.
+Primary request: remove only the light gray/white rectangular background and make it truly transparent, including the empty spaces between the colored shapes and the letters. Preserve the original logo exactly: the four glossy teal, red, orange, and dark blue abstract people forming a circular emblem on the left, the original dark teal ITeam wordmark on the right, original letter case, typography, proportions, bevels, highlights, colors, and arrangement. Do not redesign, simplify, recolor, add text, or add a new shadow/background. Keep the emblem and all letters fully intact, with clean natural antialiased edges, no white fringe. Crop the transparent canvas closely around the full original horizontal logo with a small even transparent margin. Output a genuine RGBA transparent background PNG.

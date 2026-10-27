@@ -1,1 +1,1501 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ITeam | Ethical Hacker Challenge</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400..900&display=swap');
+
+    /* ITEAM theme: off-white, teal, terracotta, orange, and deep blue. */
+    :root {
+      color-scheme: light;
+      --bg: #f3f7fa;
+      --surface: #f3f7fa;
+      --surface2: #e7f0f3;
+      --line: #d7e5eb;
+      --text: #173d4d;
+      --muted: #526f7c;
+      --cyan: #08546f;
+      --green: #246b76;
+      --amber: #99501f;
+      --red: #9e2619;
+      --violet: #425d7b;
+      --brand-red: #9e2619;
+      --teal: #429eab;
+      --orange: #df8a48;
+      --navy: #08546f;
+      --font: 'Cairo', Tahoma, Arial, sans-serif;
+      --mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #6e929e;
+      background-image:
+        radial-gradient(ellipse at 8% 5%, #dce8ec42, transparent 40%),
+        radial-gradient(ellipse at 100% 75%, #429eab26, transparent 42%),
+        linear-gradient(145deg, #7696a1 0%, #638995 48%, #3e6877 100%);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      isolation: isolate;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 8% 65%, transparent 29%, #d9e9ed12 29.2%, transparent 29.6%),
+        radial-gradient(ellipse at 96% 25%, transparent 33%, #d9e9ed16 33.2%, transparent 33.6%);
+    }
+
+    ::selection {
+      background: #429eab55;
+      color: #063d51;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    .answer:has(input:focus-visible) {
+      outline: 3px solid var(--orange);
+      outline-offset: 4px;
+    }
+
+    .shell {
+      max-width: 1200px;
+      margin: auto;
+      padding: 26px 28px 28px;
+      position: relative;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #f3f7fa40;
+      padding: 0 0 20px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      direction: ltr;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 170px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .brand-subtitle {
+      color: #f3f7fa;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      line-height: 1.5;
+    }
+
+    .live {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      direction: ltr;
+      color: var(--bg);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border: 1px solid #f3f7fa59;
+      background: #08546f4d;
+      padding: 9px 14px;
+      border-radius: 99px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      background: #f1b281;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px #df8a4826;
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: clip;
+      padding: 38px 24px 32px;
+      text-align: center;
+    }
+
+    /* Soft sculptural accents echo the rounded forms in the reference. */
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 140px;
+      height: 168px;
+      top: 45px;
+      right: 14px;
+      border-radius: 46% 54% 61% 39% / 40% 38% 62% 60%;
+      background: linear-gradient(140deg, #d3e5ed99 4%, #8bb8c6a3 28%, #08546f59 60%, #b3ced8a6 100%);
+      box-shadow: inset 9px 12px 19px #e7f0fa40, inset -12px -16px 23px #08546f2e, 16px 20px 35px #224e5a1a;
+      transform: rotate(-25deg);
+    }
+
+    .hero::after {
+      width: 94px;
+      height: 94px;
+      top: 123px;
+      left: 29px;
+      border-radius: 31% 69% 48% 52% / 38% 42% 58% 62%;
+      background: linear-gradient(145deg, #f3f7fac2, #8fc4d19c 47%, #08546f70);
+      box-shadow: inset 7px 8px 14px #ffffff57, 10px 14px 24px #173d4d26;
+      transform: rotate(27deg);
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      direction: ltr;
+      color: #f3f7fa;
+      font-size: 10px;
+      letter-spacing: 2.8px;
+      font-weight: 800;
+    }
+
+    .kicker::before {
+      content: '';
+      width: 23px;
+      height: 3px;
+      border-radius: 3px;
+      background: #efae7c;
+    }
+
+    h1 {
+      direction: ltr;
+      font-size: clamp(36px, 5.1vw, 64px);
+      line-height: 1.12;
+      margin: 17px 0 18px;
+      color: var(--bg);
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-shadow: 0 3px 12px #224e5a14;
+    }
+
+    h1 .accent {
+      color: #073e53;
+      text-shadow: 0 1px 0 #ffffff14;
+    }
+
+    h2 {
+      color: var(--navy);
+      font-weight: 900;
+      line-height: 1.6;
+    }
+
+    .welcome {
+      font-size: clamp(17px, 2.2vw, 22px);
+      font-weight: 800;
+      margin: 10px 0 8px;
+      color: #f3f7fa;
+    }
+
+    .welcome span {
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 0 auto;
+      color: #f3f7fa;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.95;
+    }
+
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 19px;
+      direction: ltr;
+    }
+
+    .pill {
+      border: 1px solid #ffffff5c;
+      background: #08546f66;
+      border-radius: 99px;
+      padding: 5px 12px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--bg);
+      letter-spacing: 1px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .maincol,
+    .sidebar {
+      min-width: 0;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #fcfdfe, var(--bg));
+      border: 1px solid #ffffffb3;
+      border-radius: 23px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px #153f4d1c, 0 2px 5px #153f4d08;
+    }
+
+    .cardhead {
+      padding: 19px 23px 17px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(115deg, #e5f0f340, #ffffff4d);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-label {
+      font-size: 9px;
+      font-weight: 800;
+      color: #54727e;
+      letter-spacing: 1.8px;
+      direction: ltr;
+      text-align: start;
+    }
+
+    .cardbody {
+      padding: 23px;
+    }
+
+    .status {
+      font: 800 10px/1.7 var(--font);
+      color: var(--green);
+      border: 1px solid #429eab45;
+      background: #e6f2f3;
+      border-radius: 99px;
+      padding: 5px 10px;
+      white-space: nowrap;
+    }
+
+    /* Cloud status colors are presentation overrides; connection code stays intact. */
+    #cloudStatus {
+      color: var(--amber);
+      background: #fbefe3 !important;
+      border-color: #df8a4859 !important;
+      font-size: 9px;
+    }
+
+    #cloudStatus[style*="--green"] {
+      background: #e6f2f3 !important;
+      border-color: #429eab45 !important;
+    }
+
+    .fieldlabel {
+      display: block;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 0 9px;
+    }
+
+    input[type=text] {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 13px;
+      border: 1px solid #cbdde4;
+      background: #fff;
+      color: var(--text);
+      padding: 12px 15px;
+      direction: auto;
+      box-shadow: inset 0 2px 4px #173d4d03;
+      transition: border-color .18s, box-shadow .18s;
+    }
+
+    input[type=text]::placeholder {
+      color: #6c8590;
+      font-size: 12px;
+    }
+
+    input[type=text]:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px #429eab14;
+    }
+
+    .startbox {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 13px;
+      padding: 11px 20px;
+      font-weight: 800;
+      font-size: 13px;
+      min-height: 48px;
+      transition: transform .18s, border-color .18s, background .18s, box-shadow .18s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: linear-gradient(125deg, #126b83, var(--navy));
+      color: #fff;
+      box-shadow: 0 5px 12px #08546f1f;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(125deg, #197e92, #06475e);
+      box-shadow: 0 7px 17px #08546f2b;
+    }
+
+    .btn-secondary {
+      background: #e6f0f3;
+      color: var(--navy);
+      border-color: #cedfe5;
+    }
+
+    .btn-secondary:hover,
+    .btn-quiet:hover {
+      background: #d9e9ee;
+      border-color: #91bac5;
+    }
+
+    .btn-quiet {
+      background: transparent;
+      border-color: #c9dce3;
+      color: var(--navy);
+    }
+
+    .btn-danger {
+      background: #faeeeb;
+      border-color: #9e261938;
+      color: var(--brand-red);
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .stat {
+      border: 1px solid #dbe7ec;
+      background: #edf3f6;
+      border-radius: 15px;
+      padding: 15px 8px 12px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .stat:nth-child(2) {
+      border-color: #d4e7e9;
+      background: #eaf3f3;
+    }
+
+    .stat:nth-child(3) {
+      border-color: #eddfd0;
+      background: #faf1e7;
+    }
+
+    .stat strong {
+      display: block;
+      font: 900 29px/1.25 var(--font);
+      font-variant-numeric: tabular-nums;
+      color: var(--navy);
+    }
+
+    .stat:nth-child(2) strong {
+      color: var(--green);
+    }
+
+    .stat:nth-child(3) strong {
+      color: var(--amber);
+    }
+
+    .stat small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: #deeaee;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 14px 0 23px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), var(--navy));
+      transition: width .3s;
+    }
+
+    .questtop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .questmeta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font: 800 10px/1.7 var(--font);
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: var(--navy);
+      background: #e7f0f5;
+      border: 1px solid #cedfe8;
+    }
+
+    .badge.level-easy {
+      color: var(--green);
+      border-color: #c5e0e2;
+      background: #e6f2f1;
+    }
+
+    .badge.level-mid {
+      color: var(--amber);
+      border-color: #edd4b9;
+      background: #fcf1e4;
+    }
+
+    .badge.level-hard {
+      color: var(--brand-red);
+      border-color: #e8c5bf;
+      background: #faeeeb;
+    }
+
+    .badge.level-veryhard {
+      color: #425d7b;
+      border-color: #cbd7e4;
+      background: #e9eff6;
+    }
+
+    .timer {
+      font: 900 18px/1.5 var(--font);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      color: var(--amber);
+      background: #fcf1e4;
+      border: 1px solid #edd4b9;
+      padding: 5px 12px;
+      border-radius: 11px;
+      min-width: 72px;
+      text-align: center;
+    }
+
+    .timer.warn {
+      color: var(--red);
+      border-color: #dfb3aa;
+      background: #faeeeb;
+    }
+
+    .mission-title {
+      font: 700 9px/1.8 var(--font);
+      letter-spacing: 1.3px;
+      color: var(--muted);
+      direction: ltr;
+      text-align: start;
+    }
+
+    .question {
+      font-size: clamp(18px, 2.2vw, 22px);
+      font-weight: 800;
+      line-height: 1.85;
+      margin: 11px 0 16px;
+      color: var(--navy);
+    }
+
+    .context {
+      background: #eaf2f5;
+      border: 1px solid #d4e4ea;
+      border-right: 3px solid var(--teal);
+      border-radius: 13px;
+      padding: 14px 16px;
+      color: #365c6b;
+      font-size: 13px;
+      line-height: 1.95;
+      margin: 15px 0;
+    }
+
+    .code {
+      display: block;
+      direction: ltr;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #f8fbfc;
+      border: 1px solid #cfdee5;
+      padding: 14px;
+      border-radius: 10px;
+      color: #08546f;
+      font: 12px/1.9 var(--mono);
+      margin-top: 10px;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .answer {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      border: 1px solid #d4e2e8;
+      border-radius: 13px;
+      padding: 13px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, box-shadow .18s;
+      min-height: 53px;
+    }
+
+    .answer:hover {
+      border-color: #82b8c3;
+      background: #f0f7f8;
+    }
+
+    .answer:has(input:checked) {
+      border-color: var(--teal);
+      background: #e8f3f4;
+      box-shadow: inset 0 0 0 1px #429eab33;
+    }
+
+    .answer input {
+      margin-top: 6px;
+      accent-color: var(--navy);
+      flex: 0 0 auto;
+    }
+
+    .answer .letter {
+      display: grid;
+      place-items: center;
+      flex: 0 0 27px;
+      height: 27px;
+      border-radius: 8px;
+      background: #eaf1f5;
+      color: var(--navy);
+      font: 800 11px/1 var(--font);
+    }
+
+    .answer:has(input:checked) .letter {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .answer .answertext {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      line-height: 1.85;
+      color: var(--text);
+    }
+
+    .formhint {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-top: 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    #questionArea > .btn {
+      margin-top: 16px;
+    }
+
+    .feedback {
+      display: none;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 18px;
+      font-size: 13px;
+      line-height: 1.95;
+    }
+
+    .feedback.good {
+      display: block;
+      background: #e6f3ef;
+      border: 1px solid #b9dcd2;
+      color: #235d50;
+    }
+
+    .feedback.bad {
+      display: block;
+      background: #fbefeb;
+      border: 1px solid #e4bdb3;
+      color: #842f22;
+    }
+
+    .feedback strong {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 800;
+    }
+
+    .nextline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 17px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .sidebar .card {
+      margin-bottom: 18px;
+    }
+
+    .sidebar .cardhead,
+    .sidebar .cardbody {
+      padding: 18px 20px;
+    }
+
+    .board-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .board-row {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 9px;
+      align-items: center;
+      padding: 11px 10px;
+      background: #edf3f6;
+      border: 1px solid #dce8ed;
+      border-radius: 12px;
+    }
+
+    .board-row:first-child {
+      background: #fbf1e7;
+      border-color: #eddbca;
+    }
+
+    .rank {
+      font: 900 12px/1.5 var(--font);
+      color: var(--amber);
+      text-align: center;
+    }
+
+    .board-name {
+      font-weight: 800;
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .board-date {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .board-score {
+      color: var(--navy);
+      font: 900 16px/1.5 var(--font);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .empty {
+      padding: 20px 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      background: #edf3f6;
+      border: 1px dashed #bfd3dd;
+      border-radius: 13px;
+      line-height: 1.95;
+    }
+
+    .board-actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .board-actions .btn {
+      font-size: 11px;
+      padding: 9px 12px;
+      min-height: 40px;
+    }
+
+    .rules {
+      display: grid;
+      gap: 16px;
+    }
+
+    .rule {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      color: #466674;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .rule b {
+      color: var(--navy);
+      background: #e6eff4;
+      border: 1px solid #d1e0e7;
+      border-radius: 9px;
+      font: 800 11px/1.6 var(--font);
+      padding: 5px 6px;
+      flex: 0 0 32px;
+      text-align: center;
+    }
+
+    .rule:nth-child(2) b {
+      color: var(--green);
+      background: #e5f2f1;
+      border-color: #cce3e3;
+    }
+
+    .rule:nth-child(3) b {
+      color: var(--amber);
+      background: #faf0e6;
+      border-color: #eddbc7;
+    }
+
+    .rule:nth-child(4) b {
+      color: var(--brand-red);
+      background: #f7ece9;
+      border-color: #e6ccc5;
+    }
+
+    .footer {
+      padding-top: 23px;
+      text-align: center;
+      color: var(--bg);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      direction: ltr;
+    }
+
+    .tiny-note {
+      font-size: 10px;
+      color: #5c7683;
+      line-height: 1.9;
+      margin-top: 14px;
+    }
+
+    .finish-score {
+      font: 900 clamp(42px, 6vw, 68px)/1.5 var(--font);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      color: var(--navy);
+      text-align: center;
+      margin: 14px 0;
+    }
+
+    .finish-title {
+      text-align: center;
+      color: var(--navy);
+      font-size: 25px;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1000px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 16px;
+      }
+
+      .hero::before {
+        width: 105px;
+        height: 135px;
+        right: 0;
+        opacity: .65;
+      }
+
+      .hero::after {
+        width: 74px;
+        height: 74px;
+        left: 0;
+        opacity: .65;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        padding: 20px 16px 25px;
+      }
+
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .sidebar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        align-items: start;
+      }
+
+      .sidebar .card {
+        margin-bottom: 0;
+      }
+
+      .hero {
+        padding: 32px 12px 28px;
+      }
+
+      h1 {
+        font-size: clamp(36px, 7.3vw, 54px);
+      }
+
+      .hero::before {
+        top: 35px;
+        right: -4px;
+        opacity: .35;
+      }
+
+      .hero::after {
+        top: 120px;
+        left: -3px;
+        opacity: .35;
+      }
+
+      .live {
+        font-size: 8px;
+        padding: 8px 11px;
+        letter-spacing: .6px;
+      }
+
+      .cardhead,
+      .cardbody {
+        padding: 19px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .shell {
+        padding: 16px 12px 23px;
+      }
+
+      .topline {
+        gap: 12px;
+        padding-bottom: 16px;
+      }
+
+      .brand-logo {
+        width: 128px;
+      }
+
+      .brand-subtitle {
+        font-size: 7px;
+        letter-spacing: 1.1px;
+      }
+
+      .live {
+        max-width: 160px;
+        font-size: 7px;
+        letter-spacing: .25px;
+        padding: 7px 9px;
+        gap: 7px;
+      }
+
+      .hero {
+        padding: 29px 6px 26px;
+      }
+
+      .kicker {
+        font-size: 8px;
+        letter-spacing: 1.8px;
+        gap: 9px;
+      }
+
+      h1 {
+        font-size: clamp(32px, 8.8vw, 46px);
+        letter-spacing: -1.4px;
+        margin: 17px 0;
+      }
+
+      .welcome {
+        font-size: 17px;
+      }
+
+      .hero p {
+        font-size: 12px;
+        line-height: 2;
+      }
+
+      .hero-tags {
+        gap: 6px;
+        margin-top: 16px;
+      }
+
+      .pill {
+        font-size: 8px;
+        padding: 5px 9px;
+        letter-spacing: .6px;
+      }
+
+      .startbox,
+      .sidebar {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .startbox {
+        gap: 13px;
+      }
+
+      .card {
+        border-radius: 19px;
+      }
+
+      .cardhead,
+      .cardbody,
+      .sidebar .cardhead,
+      .sidebar .cardbody {
+        padding: 17px;
+      }
+
+      .stats {
+        gap: 7px;
+        margin: 17px 0;
+      }
+
+      .stat {
+        border-radius: 12px;
+        padding: 12px 5px 10px;
+      }
+
+      .stat strong {
+        font-size: 25px;
+      }
+
+      .stat small {
+        font-size: 9px;
+      }
+
+      .context {
+        padding: 12px 13px;
+        font-size: 12px;
+      }
+
+      .answer {
+        gap: 8px;
+        padding: 11px 9px;
+      }
+
+      .answer .answertext {
+        font-size: 12px;
+      }
+
+      .footer {
+        font-size: 8px;
+        letter-spacing: .9px;
+        line-height: 1.9;
+      }
+    }
+
+    body.board-only .maincol {
+      display: none;
+    }
+
+    body.board-only .layout {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 900px;
+      margin: auto;
+    }
+
+    body.board-only .sidebar {
+      display: block;
+    }
+
+    body.board-only .sidebar > .card:not(:first-child) {
+      display: none;
+    }
+
+    body.board-only .board-row {
+      padding: 16px;
+    }
+
+    body.board-only .board-name {
+      font-size: 16px;
+    }
+
+    body.board-only .board-score {
+      font-size: 21px;
+    }
+
+    body.board-only .hero p {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell" id="app">
+    <div class="topline">
+      <div class="brand">
+        <img class="brand-logo" src="assets/iteam-logo.png" alt="ITeam" width="1812" height="868">
+        <span class="brand-subtitle">CYBERSECURITY TEAM</span>
+      </div>
+      <div class="live"><span class="dot"></span> ITEAM // CLOUD LEADERBOARD</div>
+    </div>
+
+    <section class="hero">
+      <div class="kicker">THINK • INVESTIGATE • DEFEND</div>
+      <h1>ETHICAL <span class="accent">HACKER</span><br>CHALLENGE</h1>
+      <div class="welcome">فريق الأمن السيبراني بـ <span>ITEAM</span> يرحّب بكم</div>
+      <p>فريق الأمن السيبراني بـ ITEAM يرحّب بكم — تجربة ممتعة من الأسهل إلى الأصعب. 11 سؤالًا متدرّجًا من السهل إلى
+        الصعب جدًا. جرّب، تعلّم، ونافس زملاءك!</p>
+      <div class="hero-tags">
+        <span class="pill">11 QUESTIONS</span><span class="pill">EASY → VERY HARD</span><span class="pill">SHARED
+          CLOUD</span><span class="pill">LEADERBOARD</span>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="maincol">
+        <div class="card">
+          <div class="cardhead">
+            <div>
+              <div class="section-label">MISSION CONSOLE / 01</div>
+              <h2 style="margin:6px 0 0;font-size:17px">مركز التحدّي</h2>
+            </div><span class="status" id="sessionStatus">READY</span>
+          </div>
+          <div class="cardbody">
+            <div id="intro">
+              <div class="startbox">
+                <div><label class="fieldlabel" for="playerName">اسم اللاعب / لقب مستعار</label><input id="playerName"
+                    type="text" maxlength="24" placeholder="مثال: CyberFalcon" autocomplete="off"></div>
+                <button class="btn btn-primary" id="startBtn" type="button">ابدأ المهمة ↵</button>
+              </div>
+              <div class="stats">
+                <div class="stat"><strong>11</strong><small>سؤالًا متدرّجًا</small></div>
+                <div class="stat"><strong>4</strong><small>مستويات صعوبة</small></div>
+                <div class="stat"><strong>∞</strong><small>فرصة للتعلّم</small></div>
+              </div>
+              <div class="context"><b style="color:var(--cyan)">مهمتك:</b> أنت ضمن فريق استجابة لحوادث افتراضي. أمامك
+                أسئلة متدرّجة في الصعوبة. اقرأ كل سؤال والخيارات بعناية قبل الاختيار.</div>
+              <div class="tiny-note">كل الأحداث والبيانات خيالية ومصممة للتعلّم. لا يتصل هذا التطبيق بأي شبكة أو نظام
+                حقيقي.</div>
+            </div>
+            <div id="game" class="hidden">
+              <div class="stats">
+                <div class="stat"><strong id="progressStat">0/11</strong><small>التقدّم</small></div>
+                <div class="stat"><strong id="scoreStat">0</strong><small>النقاط</small></div>
+                <div class="stat"><strong id="maxStat">480</strong><small>النقاط الممكنة</small></div>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <div id="questionArea"></div>
+              <div id="feedback" class="feedback" aria-live="polite"></div>
+              <div class="nextline"><span id="feedbackHint">اقرأ الأدلة بعناية قبل إرسال إجابتك.</span><span
+                  id="scoreRule">لا توجد عقوبة على الإجابة الخاطئة.</span></div>
+            </div>
+            <div id="finish" class="hidden"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="card">
+          <div class="cardhead">
+            <div>
+              <div class="section-label">LIVE RANKING</div>
+              <h2 style="margin:6px 0 0;font-size:16px">لوحة المتصدرين</h2>
+            </div><span class="status" id="cloudStatus">يحتاج إعداد الاتصال</span>
+          </div>
+          <div class="cardbody">
+            <div id="leaderboard" class="board-list">
+              <div class="empty">جاري الاتصال بلوحة المتصدرين المشتركة…</div>
+            </div>
+            <div class="tiny-note" id="cloudNote">ستُعرض هنا نتائج جميع المشاركين من الهواتف واللابتوبات، وتتحدث اللوحة
+              تلقائيًا.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="cardhead">
+            <div>
+              <div class="section-label">RULES OF ENGAGEMENT</div>
+              <h2 style="margin:6px 0 0;font-size:16px">قواعد اللعب</h2>
+            </div>
+          </div>
+          <div class="cardbody rules">
+            <div class="rule"><b>01</b><span>اقرأ السيناريو؛ بعض الأسئلة تقيس الاستنتاج وليس الحفظ.</span></div>
+            <div class="rule"><b>02</b><span>في المستويات المتقدمة، اقرأ السيناريو كاملًا قبل اختيار الإجابة.</span>
+            </div>
+            <div class="rule"><b>03</b><span>الأسئلة الأصعب تمنح نقاطًا أكثر، والوقت جزء من التحدّي.</span></div>
+            <div class="rule"><b>04</b><span>استخدم لقبًا فقط. لا تُدخل بيانات حقيقية أو كلمات مرور شخصية.</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <div class="footer">ITEAM CYBERSECURITY TEAM • THINK BEFORE YOU CLICK • TRAIN ETHICALLY</div>
+  </div>
+
+  <script>
+    window.ITEAM_CONFIG = {
+      supabaseUrl: "https://kmwfbscnvomhzvlwlzxw.supabase.co",
+      supabaseAnonKey: "sb_publishable_KbNrwuyjls6xUkwuDfI-oA_zvdc57aU"
+    };
+  </script>
+  <script>
+    (function () {
+      "use strict";
+      if (new URLSearchParams(location.search).get("board") === "1") { document.body.classList.add("board-only"); }
+      const tasks = [
+        {
+          level: "سهل 1/3", levelClass: "level-easy", title: "01 / كلمة المرور الأقوى", points: 30, time: 35, type: "single",
+          question: "أي كلمة من كلمات المرور التالية تعتبر الأقوى؟",
+          options: ["أ) 123456", "ب) ahmad2005", "ج) T#9vL!x2qZ$m", "د) password"],
+          answer: [2], explain: "كلمة المرور القوية طويلة وفريدة وتجمع أحرفًا كبيرة وصغيرة وأرقامًا ورموزًا."
+        },
+        {
+          level: "سهل 2/3", levelClass: "level-easy", title: "02 / رسالة بنكية مشبوهة", points: 30, time: 35, type: "single",
+          question: "وصلتك رسالة تقول إن حسابك البنكي سيتم إغلاقه وتطلب منك الضغط على رابط وإدخال بياناتك. هذا مثال على:",
+          options: ["أ) التصيد الاحتيالي (Phishing)", "ب) النسخ الاحتياطي (Backup)", "ج) تحديث أمني رسمي", "د) جدار ناري (Firewall)"],
+          answer: [0], explain: "هذه رسالة قد تنتحل صفة جهة موثوقة لسرقة بياناتك؛ لا تضغط الرابط وتحقق من البنك عبر قناة رسمية."
+        },
+        {
+          level: "سهل 3/3", levelClass: "level-easy", title: "03 / معنى HTTPS", points: 30, time: 35, type: "single",
+          question: "ماذا يعني الحرف S في بروتوكول HTTPS؟",
+          options: ["أ) Speed", "ب) Server", "ج) Simple", "د) Secure"],
+          answer: [3], explain: "الحرف S يعني Secure، ويشير إلى اتصال محمي باستخدام التشفير؛ لكنه لا يضمن وحده أن الموقع موثوق."
+        },
+        {
+          level: "متوسط 1/3", levelClass: "level-mid", title: "04 / المصادقة الثنائية", points: 40, time: 45, type: "single",
+          question: "ما هي المصادقة الثنائية (2FA) ولماذا هي مفيدة؟",
+          options: ["أ) استخدام كلمتي مرور متطابقتين لنفس الحساب", "ب) إضافة خطوة تحقق ثانية (مثل رمز على الهاتف) بعد كلمة المرور", "ج) تسجيل الدخول من جهازين في نفس الوقت", "د) تشفير الحساب بكلمة مرور مضاعفة الطول"],
+          answer: [1], explain: "حتى لو سُرقت كلمة المرور، يحتاج المهاجم إلى عامل تحقق ثانٍ للدخول إلى الحساب."
+        },
+        {
+          level: "متوسط 2/3", levelClass: "level-mid", title: "05 / برمجية الفدية", points: 40, time: 45, type: "single",
+          question: "أي نوع من البرمجيات الخبيثة يشفّر ملفاتك ويطلب فدية مالية لفك التشفير؟",
+          options: ["أ) Spyware", "ب) Adware", "ج) Ransomware", "د) Keylogger"],
+          answer: [2], explain: "Ransomware هي برمجية فدية. النسخ الاحتياطي المنتظم والمعزول يساعد على استعادة الملفات."
+        },
+        {
+          level: "متوسط 3/3", levelClass: "level-mid", title: "06 / Hashing أم Encryption؟", points: 40, time: 50, type: "single",
+          question: "ما الفرق الأساسي بين التجزئة (Hashing) والتشفير (Encryption)؟",
+          options: ["أ) التشفير في اتجاه واحد فقط، والتجزئة يمكن عكسها", "ب) التجزئة تحتاج مفتاحًا دائمًا، والتشفير لا يحتاج", "ج) لا فرق، هما اسمان لنفس الشيء", "د) التجزئة في اتجاه واحد لا يمكن عكسه، والتشفير يمكن فكه بالمفتاح"],
+          answer: [3], explain: "التجزئة عملية أحادية الاتجاه، أما التشفير فيمكن فكّه بالمفتاح المناسب."
+        },
+        {
+          level: "صعب 1/2", levelClass: "level-hard", title: "07 / الحماية من SQL Injection", points: 60, time: 55, type: "single",
+          question: "أي مما يلي هو الحماية الأفضل ضد هجمات حقن SQL (SQL Injection)؟",
+          options: ["أ) إخفاء زر تسجيل الدخول", "ب) استخدام الاستعلامات المهيّأة (Prepared Statements) مع التحقق من المدخلات", "ج) تغيير لون الموقع", "د) منع المستخدمين من كتابة أي رموز في المتصفح"],
+          answer: [1], explain: "الاستعلامات المهيّأة تفصل أوامر SQL عن بيانات المستخدم، وهي دفاع أساسي ضد حقن SQL."
+        },
+        {
+          level: "صعب 2/2", levelClass: "level-hard", title: "08 / الفرق بين XSS وCSRF", points: 60, time: 55, type: "single",
+          question: "ما الفرق بين هجوم XSS وهجوم CSRF؟",
+          options: ["أ) XSS يحقن سكربت خبيث ينفذ في متصفح الضحية، وCSRF يخدع المتصفح لإرسال طلب غير مقصود باسم المستخدم المسجل دخوله", "ب) XSS يخص الشبكات اللاسلكية وCSRF يخص الأقراص الصلبة", "ج) CSRF يحقن سكربت في الصفحة وXSS يرسل طلبات مزورة فقط", "د) لا فرق بينهما، كلاهما هجوم حرمان من الخدمة"],
+          answer: [0], explain: "XSS يشغّل سكربتًا خبيثًا في متصفح الضحية، بينما يستغل CSRF جلسة المستخدم لإرسال طلب لم يقصده."
+        },
+        {
+          level: "صعب جدًا 1/2", levelClass: "level-veryhard", title: "09 / لماذا نستخدم Salt؟", points: 70, time: 70, type: "single",
+          question: "لماذا نضيف ملحًا (Salt) عشوائيًا لكل كلمة مرور قبل تجزئتها؟",
+          options: ["أ) لتصغير حجم الـ Hash المخزّن", "ب) لجعل كلمة المرور أسهل في التذكر", "ج) لتسريع عملية تسجيل الدخول", "د) لمنع هجمات جداول الـ Rainbow Tables وجعل نفس كلمة المرور تعطي Hash مختلفًا لكل مستخدم"],
+          answer: [3], explain: "الملح العشوائي الفريد يجعل التجزئات مختلفة حتى عند تكرار كلمة المرور، ويصعّب استخدام جداول التجزئة المسبقة."
+        },
+        {
+          level: "صعب جدًا 2/2", levelClass: "level-veryhard", title: "10 / Perfect Forward Secrecy", points: 70, time: 70, type: "single",
+          question: "في بروتوكول TLS، ما الذي تضمنه خاصية السرية التامة للأمام (Perfect Forward Secrecy)؟",
+          options: ["أ) أن المفتاح الخاص للخادم لا ينتهي أبدًا", "ب) أن الشهادة الرقمية لا يمكن تزويرها", "ج) أن اختراق المفتاح الخاص للخادم مستقبلًا لا يكشف الجلسات القديمة المسجلة، لأن مفاتيح الجلسات مؤقتة ومستقلة", "د) أن الاتصال لا يحتاج لتبادل مفاتيح أصلًا"],
+          answer: [2], explain: "تُستخدم مفاتيح جلسات مؤقتة ومستقلة، بحيث لا يكشف اختراق المفتاح الخاص للخادم لاحقًا مفاتيح الجلسات القديمة."
+        },
+        {
+          level: "السؤال الأخير 🎉", levelClass: "level-easy", title: "11 / تابعوا ITEAM على إنستغرام", points: 10, time: 30, type: "single",
+          question: "سويت فولو لحسابنا على الانستغرام؟ (@Iteamzuj)",
+          options: ["أ) لسا، بس بسويله هسا", "ب) أكيد سويت فولو ولايك كمان 💙", "ج) شو هو الانستغرام أصلًا؟"],
+          answer: [1], explain: "يسعدنا دعمكم ومتابعتكم لفريق ITEAM على إنستغرام 💙"
+        }
+      ];
+      const $ = id => document.getElementById(id);
+      let player = "", idx = 0, score = 0, timer = null, seconds = 0, locked = false, results = [], startTime = 0;
+      const maxScore = tasks.reduce((n, t) => n + t.points, 0);
+      $("maxStat").textContent = maxScore;
+      function escapeHTML(v) { return String(v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+      const cloudConfig = window.ITEAM_CONFIG || {};
+      const SUPABASE_URL = String(cloudConfig.supabaseUrl || "").trim().replace(/\/$/, "");
+      const SUPABASE_KEY = String(cloudConfig.supabaseAnonKey || cloudConfig.publishableKey || "").trim();
+      let cloudRows = [];
+      let cloudReady = false;
+      function isConfigured() {
+        return /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(SUPABASE_URL) && (SUPABASE_KEY.startsWith("sb_publishable_") || SUPABASE_KEY.length > 20);
+      }
+      function cloudHeaders(extra = {}) {
+        return Object.assign({ "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json" }, extra);
+      }
+      function setCloudStatus(message, good = false) {
+        const el = $("cloudStatus");
+        if (!el) return;
+        el.textContent = message;
+        el.style.color = good ? "var(--green)" : "var(--amber)";
+        el.style.borderColor = good ? "#285441" : "#66502e";
+        el.style.background = good ? "#0a211c" : "#241b0b";
+      }
+      function renderBoard() {
+        const rows = cloudRows.slice(0, 10);
+        $("leaderboard").innerHTML = rows.length ? rows.map((r, i) => `<div class="board-row"><div class="rank">${String(i + 1).padStart(2, "0")}</div><div><div class="board-name">${escapeHTML(r.player || "Player")}</div><div class="board-date">${r.created_at ? new Date(r.created_at).toLocaleTimeString("ar-JO", { hour: "2-digit", minute: "2-digit" }) : ""}</div></div><div class="board-score">${Number(r.score) || 0}</div></div>`).join("") : '<div class="empty">ما في نتائج لحد الآن. كن أول بطل!</div>';
+      }
+      async function fetchLeaderboard(silent = false) {
+        if (!isConfigured()) {
+          setCloudStatus("يحتاج إعداد الاتصال");
+          $("leaderboard").innerHTML = '<div class="empty">تحقّق من إعداد Supabase والاتصال بالإنترنت؛ أعد تحميل الصفحة بعد دقائق إذا لزم.</div>';
+          if ($("cloudNote")) $("cloudNote").textContent = "لا تضف أبدًا مفتاح secret أو service_role إلى ملف الموقع.";
+          return;
+        }
+        try {
+          const url = SUPABASE_URL + "/rest/v1/iteam_scores?challenge_version=eq.v11&select=player_name,score,correct_count,created_at&order=score.desc,created_at.asc&limit=10";
+          const res = await fetch(url, { headers: cloudHeaders(), cache: "no-store" });
+          if (!res.ok) throw new Error("HTTP " + res.status + " " + (await res.text()).slice(0, 180));
+          const rows = await res.json();
+          cloudRows = Array.isArray(rows) ? rows.map(r => ({ ...r, player: r.player_name })) : [];
+          cloudReady = true; renderBoard(); setCloudStatus("متصل • تحديث مباشر", true);
+          if ($("cloudNote")) $("cloudNote").textContent = "لوحة مشتركة؛ يتم تحديث النتائج تلقائيًا كل 3 ثوانٍ.";
+        } catch (err) {
+          if (!silent) setCloudStatus("تعذّر الاتصال");
+          if ($("cloudNote")) $("cloudNote").textContent = "تعذّر تحميل النتائج. تأكد من إعداد Supabase وسياسات قاعدة البيانات والاتصال بالإنترنت.";
+          if (!cloudRows.length) $("leaderboard").innerHTML = '<div class="empty">لم نتمكن من تحميل النتائج. راجع إعداد Supabase وسياسات الوصول.</div>';
+          console.error("Leaderboard fetch failed:", err);
+        }
+      }
+      async function submitScore(rec) {
+        if (!isConfigured()) {
+          setCloudStatus("لم تُحفظ النتيجة: إعداد الاتصال ناقص");
+          if ($("cloudNote")) $("cloudNote").textContent = "أكمل config.js ثم أعد نشر الموقع. هذه الجولة لم تُحفظ في لوحة مشتركة.";
+          return false;
+        }
+        try {
+          const res = await fetch(SUPABASE_URL + "/rest/v1/iteam_scores", {
+            method: "POST", headers: cloudHeaders({ "Prefer": "return=minimal" }),
+            body: JSON.stringify({ player_name: rec.name, score: rec.score, correct_count: rec.correct, challenge_version: "v11" })
+          });
+          if (!res.ok) throw new Error("HTTP " + res.status + " " + (await res.text()).slice(0, 180));
+          setCloudStatus("تم حفظ النتيجة", true);
+          await fetchLeaderboard();
+          return true;
+        } catch (err) {
+          setCloudStatus("فشل حفظ النتيجة");
+          if ($("cloudNote")) $("cloudNote").textContent = "لم نستطع حفظ نتيجة هذا اللاعب. تحقق من إعداد SQL واسم الجدول ومفتاح النشر.";
+          console.error("Score submit failed:", err);
+          return false;
+        }
+      }
+      function updateStats() {
+        $("progressStat").textContent = `${Math.min(idx + 1, tasks.length)}/${tasks.length}`;
+        $("scoreStat").textContent = score;
+        $("progressFill").style.width = `${(idx / tasks.length) * 100}%`;
+      }
+      function startGame() {
+        const name = $("playerName").value.trim();
+        if (!name) { $("playerName").focus(); alert("اكتب اسمًا مستعارًا قبل البدء."); return }
+        player = name.slice(0, 24); idx = 0; score = 0; results = []; startTime = Date.now(); locked = false;
+        $("intro").classList.add("hidden"); $("finish").classList.add("hidden"); $("game").classList.remove("hidden");
+        $("sessionStatus").textContent = "IN MISSION"; updateStats(); showQuestion();
+      }
+      function showQuestion() {
+        clearInterval(timer); locked = false;
+        if (idx >= tasks.length) { finishGame(); return }
+        const t = tasks[idx]; seconds = t.time;
+        const typeText = t.type === "text";
+        const typeMulti = t.type === "multi";
+        const typeOrder = t.type === "order";
+        $("feedback").className = "feedback"; $("feedback").innerHTML = "";
+        $("feedbackHint").textContent = typeMulti ? "اختر كل الإجابات الصحيحة." : typeOrder ? "اسحب الخيارات لتغيير ترتيبها، أو استخدم أزرار الأعلى والأسفل." : "حلّل التفاصيل؛ أكثر إجابة تبدو مألوفة ليست دائمًا الأنسب.";
+        $("scoreRule").textContent = `قيمة المهمة: ${t.points} نقطة`;
+        const context = t.context ? `<div class="context">${t.context}</div>` : "";
+        const inputArea = typeText
+          ? `<label class="fieldlabel" for="textAnswer">الإجابة</label><input id="textAnswer" type="text" maxlength="80" placeholder="${escapeHTML(t.placeholder || "اكتب إجابتك")}" autocomplete="off"><div class="formhint">تُتجاهل المسافات الزائدة وحالة الأحرف عند التصحيح.</div>`
+          : `<div class="answers" id="answers">${t.options.map((o, i) => typeOrder ? `<div class="answer" data-index="${i}" style="align-items:center"><span class="letter">${i + 1}</span><span class="answertext" style="flex:1">${escapeHTML(o)}</span><button class="btn btn-quiet moveup" type="button" aria-label="تحريك للأعلى" style="padding:5px 9px;min-height:32px">↑</button><button class="btn btn-quiet movedown" type="button" aria-label="تحريك للأسفل" style="padding:5px 9px;min-height:32px">↓</button></div>` : `<label class="answer"><input type="${typeMulti ? 'checkbox' : 'radio'}" name="answer" value="${i}"><span class="letter">${String.fromCharCode(65 + i)}</span><span class="answertext">${escapeHTML(o)}</span></label>`).join("")}</div>`;
+        $("questionArea").innerHTML = `
+  <div class="questtop"><div class="questmeta"><span class="badge ${t.levelClass}">${t.level}</span><span class="badge">${t.title}</span></div><div class="timer" id="timer">${seconds}s</div></div>
+  <div class="mission-title">CASE FILE ${String(idx + 1).padStart(2, "0")} // CLASSIFIED TRAINING DATA</div>
+  <div class="question">${t.question}</div>${context}${inputArea}
+  <div class="actions"><button class="btn btn-primary" id="submitAnswer" type="button">اعتماد الإجابة</button><button class="btn btn-secondary" id="resetAnswer" type="button">إعادة الاختيار</button></div>`;
+        if (typeOrder) wireOrderControls();
+        $("submitAnswer").addEventListener("click", submitAnswer);
+        $("resetAnswer").addEventListener("click", resetAnswer);
+        if (typeText) $("textAnswer").addEventListener("keydown", e => { if (e.key === "Enter") submitAnswer() });
+        updateStats();
+        timer = setInterval(() => { seconds--; const el = $("timer"); if (el) { el.textContent = seconds + "s"; if (seconds <= 10) el.classList.add("warn") } if (seconds <= 0) { clearInterval(timer); grade(false, true) } }, 1000);
+      }
+      function wireOrderControls() {
+        const list = $("answers");
+        list.addEventListener("click", e => {
+          const up = e.target.closest(".moveup"), down = e.target.closest(".movedown"); if (!up && !down) return;
+          const row = e.target.closest(".answer");
+          if (up && row.previousElementSibling) list.insertBefore(row, row.previousElementSibling);
+          if (down && row.nextElementSibling) list.insertBefore(row.nextElementSibling, row);
+          [...list.children].forEach((el, i) => el.querySelector(".letter").textContent = i + 1);
+        });
+      }
+      function resetAnswer() {
+        const t = tasks[idx];
+        if (t.type === "text") { $("textAnswer").value = ""; $("textAnswer").focus() }
+        else if (t.type === "order") {
+          const list = $("answers");[...list.children].sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index)).forEach(el => list.appendChild(el));
+          [...list.children].forEach((el, i) => el.querySelector(".letter").textContent = i + 1);
+        } else document.querySelectorAll('#answers input').forEach(el => el.checked = false);
+      }
+      function submitAnswer() {
+        if (locked) return;
+        const t = tasks[idx]; let correct = false;
+        if (t.type === "text") {
+          const val = $("textAnswer").value.trim().replace(/\s+/g, "").toUpperCase();
+          correct = t.accepted.map(x => x.trim().replace(/\s+/g, "").toUpperCase()).includes(val);
+        } else if (t.type === "order") {
+          const current = [...$("answers").children].map(el => Number(el.dataset.index));
+          correct = JSON.stringify(current) === JSON.stringify(t.answerOrder);
+        } else {
+          const selected = [...document.querySelectorAll('#answers input:checked')].map(x => Number(x.value)).sort((a, b) => a - b);
+          if (!selected.length) { alert("اختَر إجابة قبل الاعتماد."); return }
+          const expected = [...t.answer].sort((a, b) => a - b);
+          correct = JSON.stringify(selected) === JSON.stringify(expected);
+        }
+        grade(correct, false);
+      }
+      function grade(correct, timedOut) {
+        if (locked) return; locked = true; clearInterval(timer);
+        const t = tasks[idx]; if (correct) score += t.points;
+        results.push({ title: t.title, correct, earned: correct ? t.points : 0 });
+        updateStats();
+        $("sessionStatus").textContent = correct ? "CASE CLEARED" : "CASE REVIEW";
+        $("feedback").className = "feedback " + (correct ? "good" : "bad");
+        $("feedback").innerHTML = `<strong>${correct ? `✓ إجابة صحيحة — +${t.points} نقطة` : (timedOut ? "انتهى الوقت" : "ليست الإجابة الأدق")}.</strong>${escapeHTML(t.explain)}`;
+        $("submitAnswer").disabled = true; $("resetAnswer").disabled = true;
+        $("feedbackHint").textContent = correct ? "أحسنت. انتقل إلى الملف التالي." : "راجع التفسير؛ جمع الأدلة أهم من التخمين.";
+        const next = document.createElement("button"); next.type = "button"; next.className = "btn btn-primary"; next.textContent = idx === tasks.length - 1 ? "عرض التقرير النهائي" : "الملف التالي ←"; next.addEventListener("click", () => { idx++; showQuestion() });
+        $("questionArea").appendChild(next);
+      }
+      function finishGame() {
+        clearInterval(timer); $("game").classList.add("hidden"); $("finish").classList.remove("hidden");
+        const elapsed = Math.round((Date.now() - startTime) / 1000);
+        const rec = { name: player, score, elapsed, date: new Date().toISOString(), correct: results.filter(r => r.correct).length, total: tasks.length };
+        submitScore(rec);
+        const percent = Math.round(score / maxScore * 100);
+        let rank = "محلّل مبتدئ";
+        if (percent >= 85) rank = "بطل الوعي السيبراني";
+        else if (percent >= 65) rank = "مستكشف سيبراني";
+        $("sessionStatus").textContent = "MISSION COMPLETE";
+        $("finish").innerHTML = `<div class="badge level-easy">ALL CASES REVIEWED</div><div class="finish-title" style="margin-top:14px">انتهت المهمة، ${escapeHTML(player)}!</div><div class="finish-score">${score}<span style="font-size:18px;color:var(--muted)"> / ${maxScore}</span></div><div style="text-align:center;color:var(--cyan);font-weight:900;font-size:16px">${rank}</div><div class="stats"><div class="stat"><strong>${rec.correct}/${tasks.length}</strong><small>إجابات صحيحة</small></div><div class="stat"><strong>${percent}%</strong><small>النتيجة</small></div><div class="stat"><strong>${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}</strong><small>الوقت</small></div></div><div class="context">تذكّر: في الأمن السيبراني، القرار الأفضل يستند إلى الأدلة، ويميّز بين الاشتباه والإثبات، ويحافظ على السجلات.</div><div class="actions"><button class="btn btn-primary" id="newPlayerBtn" type="button">مشارك جديد</button><button class="btn btn-secondary" id="reviewBtn" type="button">عرض ملخص الجولة</button></div><div id="reviewPanel" class="hidden" style="margin-top:12px"></div>`;
+        $("newPlayerBtn").addEventListener("click", newPlayer);
+        $("reviewBtn").addEventListener("click", () => {
+          const box = $("reviewPanel"); box.classList.toggle("hidden");
+          box.innerHTML = results.map((r, i) => `<div class="board-row"><div class="rank">${String(i + 1).padStart(2, "0")}</div><div class="board-name">${escapeHTML(r.title)}</div><div class="board-score">${r.correct ? "+" + r.earned : "0"}</div></div>`).join("");
+        });
+      }
+      function newPlayer() {
+        $("finish").classList.add("hidden"); $("intro").classList.remove("hidden"); $("playerName").value = ""; $("playerName").focus(); $("sessionStatus").textContent = "READY";
+      }
+      $("startBtn").addEventListener("click", startGame);
+      $("playerName").addEventListener("keydown", e => { if (e.key === "Enter") startGame() });
+      // Load shared rankings and refresh on each device without a manual reload.
+      fetchLeaderboard();
+      setInterval(() => fetchLeaderboard(true), 3000);
+    })();
+  </script>
+</body>
+
+</html>
